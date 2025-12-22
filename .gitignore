@@ -210,3 +210,7 @@ __marimo__/
 .Rhistory
 __pycache__/
 .ipynb_checkpoints/
+
+# Project outputs
+results/
+results/.mpl_cache/
