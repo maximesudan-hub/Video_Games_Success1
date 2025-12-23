@@ -167,3 +167,21 @@ def plot_pca_clusters(
     plt.tight_layout()
     plt.savefig(out_path, dpi=150)
     plt.close()
+
+
+def plot_feature_importance(
+    importance_df: pd.DataFrame,
+    out_path: Path,
+    title: str,
+    top_n: int = 20,
+) -> None:
+    """Plot top-N feature importances."""
+    top = importance_df.head(top_n).iloc[::-1]
+    plt.figure(figsize=(8, 6))
+    plt.barh(top["feature"], top["importance"], color="#4c78a8")
+    plt.xlabel("Importance")
+    plt.title(title)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=150)
+    plt.close()

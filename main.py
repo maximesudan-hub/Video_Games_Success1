@@ -26,6 +26,7 @@ from src.evaluation import (
     clustering_metrics,
     save_clustering_metrics,
     plot_pca_clusters,
+    plot_feature_importance,
 )
 
 
@@ -64,6 +65,44 @@ def main() -> None:
         y_pred_best,
         out_path=Path("results/figures/regression_pred_vs_true.png"),
         title=f"Predicted vs True (Log_Sales) — {best_model_name}",
+    )
+
+    # Feature importance with RandomForest (interpretability)
+    rf_model = get_regression_models(random_state=spec.random_state)["RandomForest"]
+    rf_model.fit(X_train, y_train)
+    rf_pre = rf_model.named_steps["preprocess"]
+    rf_est = rf_model.named_steps["model"]
+    feature_names = rf_pre.get_feature_names_out()
+    importances = rf_est.feature_importances_
+    label_map = {
+        "User_Count": "User Count",
+        "Critic_Count": "Critic Count",
+        "Platform": "Platform",
+        "Publisher": "Publisher",
+        "Year_of_Release": "Release Year",
+        "Critic_Score": "Critic Score",
+        "Developer": "Developer",
+        "Genre": "Genre",
+        "User_Score_100": "User Score (0-100)",
+        "Rating": "ESRB Rating",
+    }
+    pretty_names = []
+    for name in feature_names:
+        base = name.split("__", 1)[-1]
+        pretty_names.append(label_map.get(base, base))
+    fi_df = (
+        pd.DataFrame({"feature": pretty_names, "importance": importances})
+        .sort_values(by="importance", ascending=False)
+        .reset_index(drop=True)
+    )
+    fi_path = Path("results/metrics/feature_importance.csv")
+    fi_path.parent.mkdir(parents=True, exist_ok=True)
+    fi_df.to_csv(fi_path, index=False)
+    plot_feature_importance(
+        fi_df,
+        out_path=Path("results/figures/feature_importance.png"),
+        title="Feature Importance (RandomForestRegressor)",
+        top_n=20,
     )
 
     # --- Classification
@@ -121,6 +160,8 @@ def main() -> None:
     print("\nSaved:")
     print(f"- {metrics_path}")
     print("- results/figures/regression_pred_vs_true.png")
+    print("- results/metrics/feature_importance.csv")
+    print("- results/figures/feature_importance.png")
     print(f"- {cls_metrics_path}")
     print("- results/figures/classification_confusion_matrix.png")
     print("- results/figures/classification_roc_curve.png")
