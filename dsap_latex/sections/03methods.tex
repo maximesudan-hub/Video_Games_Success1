@@ -1,0 +1,69 @@
+% ============================
+\section{Methodology}
+% ============================
+
+% ==============================
+\subsection{Data Description}
+% ==============================
+
+The dataset contains 16,000+ video games released between 1980 and 2016 and is sourced from Kaggle's \emph{Video Game Sales with Ratings} \cite{KaggleVGSales}. We focus on modern games (2005+) and remove entries with missing essential metadata. Key variables:
+\begin{itemize}
+\item \textbf{Global\_Sales}: worldwide sales (millions of units).
+\item \textbf{Critic\_Score}, \textbf{Critic\_Count}: Metacritic critic ratings and counts.
+\item \textbf{User\_Score}, \textbf{User\_Count}: Metacritic user ratings and counts.
+\item \textbf{Platform}, \textbf{Genre}, \textbf{Publisher}, \textbf{Developer}, \textbf{Rating}: categorical descriptors.
+\item \textbf{Year\_of\_Release}: release year.
+\end{itemize}
+The target for regression is $\log(1+\text{Global\_Sales})$ to reduce skewness.
+
+% ==============================
+\subsection{Technical Approach}
+% ==============================
+
+\paragraph{Algorithms}
+Core models are supervised regressions and classifiers:
+\begin{enumerate}
+\item \textbf{OLS} and \textbf{Ridge} as linear baselines.
+\item \textbf{Random Forest} and \textbf{HistGradientBoosting} for nonlinear regression.
+\item \textbf{Logistic Regression} and \textbf{Random Forest Classifier} for success prediction.
+\end{enumerate}
+A complementary \textbf{KMeans} clustering on numeric features (scores, counts, release year) groups games into interpretable segments.
+
+\paragraph{Preprocessing}
+\begin{itemize}
+\item Numeric features are imputed (median) and scaled when required.
+\item Categorical features are one-hot encoded for linear models and ordinal-encoded for tree models.
+\item Train/test split: 80/20 with fixed \texttt{random\_state=42}.
+\item Success label: $\text{Global\_Sales} > 1$ (million units).
+\end{itemize}
+
+\paragraph{Model Architecture}
+\begin{itemize}
+\item Regression: fit pipelines, predict Log\_Sales, evaluate with RMSE and $R^2$.
+\item Classification: fit pipelines, predict success, evaluate with Accuracy/Precision/Recall/F1 and ROC-AUC.
+\item Clustering: numeric-only KMeans after imputation and standardization; PCA for 2D visualization.
+\end{itemize}
+
+\paragraph{Evaluation Metrics}
+\begin{itemize}
+\item Regression: RMSE and $R^2$ on the test set.
+\item Classification: Accuracy, Precision, Recall, F1, and ROC-AUC.
+\item Interpretation: Random Forest feature importance (post-encoding).
+\end{itemize}
+% ==============================
+\subsection{Unsupervised learning: K-means clustering of games}
+% ==============================
+
+We use an unsupervised approach to summarize heterogeneity across games. Clustering is descriptive: it is not used for prediction but helps interpret patterns in scores, engagement, and sales.
+
+\paragraph{Variables and standardization.}
+Clustering uses numeric indicators: \texttt{Year\_of\_Release}, \texttt{Critic\_Score}, \texttt{Critic\_Count}, \texttt{User\_Score\_100}, and \texttt{User\_Count}. All variables are median-imputed and standardized to ensure comparable scales.
+
+\paragraph{Algorithm and choice of $K$.}
+We use K-means with Euclidean distance and select $K=3$ to balance interpretability and separation. This yields clear profiles for low-, mid-, and high-engagement games.
+
+\paragraph{Cluster profiles.}
+Cluster profiles are summarized by mean sales and mean engagement indicators, as well as the most frequent platforms and genres. This helps interpret which groups of games achieve higher commercial performance.
+
+\paragraph{Integration into supervised models.}
+Clustering is used only for descriptive analysis and visualization and does not feed into the predictive models.

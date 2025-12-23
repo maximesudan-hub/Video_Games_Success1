@@ -1,0 +1,25 @@
+% ============================
+\section{Introduction}
+% ============================
+
+The video game industry is highly competitive, and commercial outcomes vary widely across titles. This project asks: \emph{Which factors best explain the commercial and critical success of a game?} The goal is both descriptive (identify key drivers) and predictive (estimate sales performance). We focus on modern games (2005+) to reduce structural shifts in the market and to reflect current platform dynamics.
+
+% ============================
+\subsection{Literature Review}
+% ============================
+
+\subsubsection{Relevant preliminary work and theoretical background}
+\paragraph{Research question and motivation}
+Which factors explain the commercial success of a video game? This question matters because development and marketing costs are high, outcomes are uncertain, and platforms/ publishers must allocate resources under strong risk. Understanding the drivers of success supports better greenlight, marketing, and release decisions.
+
+\paragraph{Evidence from the literature}
+Greenwood-Ericksen (2013) shows that Metacritic scores are significantly correlated with video game sales, with critic scores generally more stable and informative than user scores \cite{GreenwoodEricksen2013}. The study frames Metacritic as a useful aggregate signal of reception, while acknowledging that it does not capture all determinants of sales (e.g., marketing, brand effects).
+
+\paragraph{Methodological caution}
+Review-based variables are strong predictors of sales, but they must be interpreted with caution due to potential endogeneity and post-release effects. Popular games attract more attention and reviews, so the relationship is likely correlational rather than strictly causal.
+
+\paragraph{Connection to this project}
+This literature motivates the inclusion of \texttt{Critic\_Score}, \texttt{Critic\_Count}, \texttt{User\_Score}, and \texttt{User\_Count}. We treat these variables as predictive signals rather than causal drivers and emphasize the distinction between prediction and explanation.
+
+\paragraph{Positioning}
+Relative to prior work, this project compares multiple ML models, provides interpretable feature importance, and reports a cautious explanatory reading that acknowledges potential endogeneity in review signals.

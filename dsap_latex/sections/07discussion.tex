@@ -1,0 +1,9 @@
+\section{Discussion}
+
+The results highlight clear differences in predictive performance across modeling approaches. Linear baselines (OLS/Ridge) provide interpretable benchmarks but underperform tree-based models in predictive accuracy. HistGradientBoosting delivers the best regression performance, while Random Forest provides a strong balance between accuracy and interpretability through feature importance.
+
+Across models, engagement and visibility variables (Critic/User counts) consistently emerge as top predictors, suggesting that attention and reach matter as much as average review quality. Platform and publisher effects also contribute substantially, indicating that distribution channels and marketing capabilities shape commercial outcomes.
+
+Clustering based on numeric signals yields three interpretable groups: lower-engagement titles, mid-range games, and high-visibility titles with stronger sales. The PCA visualization shows partial separation, consistent with the moderate silhouette score, and reinforces that success is driven by a combination of quality signals and market reach.
+
+Overall, the findings support the central research question: success is not driven by a single factor but by a combination of reception, exposure, and market context. The choice of model depends on the objective: boosting for best prediction, random forest for explanatory insights.

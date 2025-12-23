@@ -1,0 +1,26 @@
+\section{Implementation}
+
+The project is implemented in Python 3.13 using \texttt{scikit-learn},
+\texttt{pandas}, and \texttt{numpy}. The codebase is modular, with
+separate modules for data preprocessing, model training, and evaluation.
+
+\paragraph{Key technical challenges}
+The main implementation challenges were:
+\begin{enumerate}
+    \item \textbf{Missing values and mixed data types}: The dataset mixes
+    numeric signals (scores, counts, release year) and categorical fields
+    (platform, genre, publisher). Separate preprocessing pipelines are used
+    to impute, scale, and encode these variables without leakage.
+
+    \item \textbf{Model comparability}: Different algorithms require
+    different feature encodings (one-hot for linear models vs.\ ordinal
+    encoding for tree models). A consistent train/test split and
+    reproducible pipelines ensure fair comparison.
+
+    \item \textbf{Interpretability}: The best predictive model (gradient
+    boosting) is less interpretable. To answer the research question, we
+    use Random Forest feature importance with post-encoding feature names.
+\end{enumerate}
+
+The full workflow is executed via \texttt{python main.py}, with results
+automatically saved to the \texttt{results/} directory.

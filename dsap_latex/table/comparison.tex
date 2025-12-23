@@ -1,0 +1,17 @@
+\begin{table}[h]
+\centering
+\caption{Out-of-sample predictive performance}
+\label{tab:model_comparison}
+\small
+\begin{tabularx}{\columnwidth}{lccc}
+\toprule
+Model & Train $R^2$ & Test $R^2$ & RMSE \\
+\midrule
+OLS & 0.784 & -0.24 & 0.361 \\
+Ridge ($\lambda=10$) & 0.761 & 0.609 & 0.203 \\
+Random Forest & 0.736 & 0.560 & 0.215 \\
+Gradient Boosting & 0.795 & 0.703 & 0.177 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+

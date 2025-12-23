@@ -1,0 +1,105 @@
+% ==============================
+\section{Results}
+% ==============================
+This section presents the empirical results of the predictive models. We compare linear and non-linear approaches for regression, evaluate classification performance for success prediction, and summarize clustering results. All models use an 80/20 train--test split with fixed random seeds.
+
+\subsection{Experimental Setup}
+
+\begin{itemize}
+\item \textbf{Hardware:} Apple Silicon (M1) 8-core CPU (macOS). No GPU used.
+\item \textbf{Software:} Python 3.13 with \texttt{numpy}, \texttt{pandas}, \texttt{scikit-learn}, \texttt{matplotlib}.
+\item \textbf{Protocol:} random train/test split (80/20), \texttt{random\_state=42}.
+\end{itemize}
+
+
+\subsection{Performance Evaluation}
+\subsubsection{Regression performance}
+Table~\ref{tab:reg_metrics} summarizes regression performance. HistGradientBoosting is the best model with $R^2 = 0.560$ and RMSE $= 0.215$ on the test set. Figure~\ref{fig:pred_true} shows predicted versus true Log\_Sales for the best model.
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Model & RMSE & $R^2$ \\
+\midrule
+HistGradientBoosting & 0.215 & 0.560 \\
+Random Forest & 0.225 & 0.519 \\
+Ridge & 0.241 & 0.448 \\
+OLS & 0.247 & 0.422 \\
+\bottomrule
+\end{tabular}
+\caption{Regression performance on Log\_Sales (test set).}
+\label{tab:reg_metrics}
+\end{table}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{regression_pred_vs_true.png}
+\caption{Predicted vs. true Log\_Sales (best regression model).}
+\label{fig:pred_true}
+\end{figure}
+
+\subsubsection{Interpretability}
+Feature importance from Random Forest indicates that engagement variables (User Count, Critic Count) dominate, followed by platform and publisher effects. Figure~\ref{fig:feat_imp} summarizes the top features.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{feature_importance.png}
+\caption{Random Forest feature importance (top features).}
+\label{fig:feat_imp}
+\end{figure}
+
+\subsubsection{Classification performance}
+Table~\ref{tab:cls_metrics} reports classification metrics for the success label (Global\_Sales $> 1$M). The Random Forest classifier achieves ROC-AUC $= 0.874$.
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+Model & Acc. & Prec. & Recall & F1 & ROC-AUC \\
+\midrule
+Random Forest & 0.927 & 0.772 & 0.335 & 0.467 & 0.874 \\
+Logistic Reg. & 0.924 & 0.744 & 0.302 & 0.430 & 0.858 \\
+\bottomrule
+\end{tabular}
+\caption{Classification performance (test set).}
+\label{tab:cls_metrics}
+\end{table}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{classification_roc_curve.png}
+\caption{ROC curve for success classification.}
+\label{fig:roc}
+\end{figure}
+
+\subsubsection{Clustering}
+Numeric-only KMeans with $k=3$ produces clear segments (silhouette $= 0.243$). Figure~\ref{fig:cluster_pca} visualizes clusters in 2D, and Figure~\ref{fig:cluster_profile} summarizes dominant platforms, genres, and sales levels.
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+$k$ & Silhouette & Inertia \\
+\midrule
+3 & 0.243 & 38037.58 \\
+\bottomrule
+\end{tabular}
+\caption{Clustering metrics (numeric-only KMeans).}
+\label{tab:cluster_metrics}
+\end{table}
+
+\paragraph{Cluster descriptions.}
+Cluster~1 (n=1{,}148) corresponds to high-engagement, high-sales titles with the strongest critic reception (mean Global\_Sales $\approx 1.17$, Critic\_Score $\approx 81$) and very large user counts; top platforms include X360/PS3/PC with Action and Shooter dominant.
+Cluster~0 (n=5{,}060) contains lower-sales games with modest critic scores (mean Global\_Sales $\approx 0.26$, Critic\_Score $\approx 61$), dominated by PS3/DS/X360 and Action/Misc/Sports.
+Cluster~2 (n=4{,}941) is a mid-range group with slightly higher sales and scores than Cluster~0 (mean Global\_Sales $\approx 0.31$, Critic\_Score $\approx 68$), older on average (mean release year $\approx 2007$), and concentrated on DS/PS2/Wii with Action/Sports/Misc.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{clustering_pca.png}
+\caption{PCA visualization of clusters (k=3).}
+\label{fig:cluster_pca}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{clustering_profile_overview.png}
+\caption{Cluster overview: sales and dominant categories (k=3).}
+\label{fig:cluster_profile}
+\end{figure}

@@ -1,0 +1,819 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{Inter-cantonal migration dynamics and their sensitivity to
+housing and mortgage market conditions in
+Switzerland.}\label{inter-cantonal-migration-dynamics-and-their-sensitivity-to-housing-and-mortgage-market-conditions-in-switzerland.}
+
+\textbf{Authors:} \emph{Ducotterd Maxime (maxime.ducotterd@unil.ch)}\\
+\textbf{Course:} Data Science and Advanced Programming 2025\\
+\textbf{Date:} YYYY-MM-DD \#\# Table of Contents -
+\hyperref[executive-summary]{Executive Summary} -
+\hyperref[1-introduction]{1. Introduction} - \hyperref[2-data]{2. Data}
+- \hyperref[3-empirical-strategy]{3. Empirical strategy} -
+\hyperref[4-results]{4. Results} - \hyperref[41-experimental-setup]{4.1
+Experimental Setup} - \hyperref[42-performance-evaluation]{4.2
+Performance Evaluation} - \hyperref[43-baseline-regressions]{4.3
+Baseline Regressions} - \hyperref[44-shock-exposure-analyses]{4.4 Shock
+Exposure Analyses} - \hyperref[45-additional-analyses]{4.5 Additional
+Analyses} - \hyperref[references]{References} -
+\hyperref[appendix-optional]{Appendix (Optional)} -
+\hyperref[editing-guidelines]{Editing Guidelines} \#\# Executive Summary
+
+\begin{itemize}
+\item
+  The study aims to understand what leads people to move between the
+  different Swiss cantons, focusing on how local housing and job market
+  conditions shape these movements.
+\item
+  It uses 10 years of cantonal data (2014--2024) from the Swiss Federal
+  Statistical Office, covering migration, housing, income, and
+  employment indicators.
+\item
+  The project will compare three analytical approaches: a basic linear
+  model (OLS), a version that reduces bias from correlated variables
+  (Ridge regression), and a machine-learning model (Random Forest) to
+  detect complex or nonlinear effects.
+\item
+  A time-based validation will test how well each model predicts
+  migration trends in recent years, ensuring findings are robust and not
+  overfitted.
+\item
+  An additional clustering analysis will group cantons with similar
+  patterns, in order to try to identify regional typologies.
+\item
+  The ultimate goal is to provide evidence-based insights to
+  policymakers on how housing costs, job opportunities, and mortgage
+  changes jointly influence population movements across Switzerland.
+\end{itemize}
+
+\subsection{1. Introduction}\label{introduction}
+
+Following the vote on 28 September 2025 on the abolition of rental
+value, new questions have arisen about the property market in
+Switzerland. It is in this context that this study was conceived: Do
+changes in the property and labour markets in Switzerland influence
+migration patterns between cantons? Based on the results, this study
+would provide explanations for demographic dynamics in Switzerland, in
+order to explain why certain cantons and regions attract more (or fewer)
+Swiss residents. From an economic policy perspective, this study could
+help explain regional imbalances and anticipate the economic effects of
+changes in mortgage conditions or property taxation on household
+mobility. In short, this research aims to shed light on the links
+between real estate, the labour market and internal mobility, to help
+decision-makers better understand and manage inter-cantonal migration
+dynamics in a context of structural changes in the Swiss real estate
+market.
+
+\subsection{2. Literature Review}\label{literature-review}
+
+\subsubsection{Relevant preliminary work and theoretical
+background}\label{relevant-preliminary-work-and-theoretical-background}
+
+\paragraph{Previous approaches to similar
+problems}\label{previous-approaches-to-similar-problems}
+
+An important reference is the OECD (2021) study ``Migration, Housing and
+Regional Disparities: A Gravity Model of Inter-regional Migration''.\\
+This study analyses migration flows in 14 OECD countries, including
+Switzerland, to understand how regional income, unemployment, and
+housing costs influence population movements.\\
+It concludes that people tend to move to regions with higher incomes and
+lower unemployment, while high property prices are a major obstacle to
+internal migration.\\
+In Switzerland, rising rents and property prices were found to
+particularly restrict interregional mobility, even though commuting
+partially offsets these rigidities.
+
+\paragraph{Relevant algorithms or
+methods}\label{relevant-algorithms-or-methods}
+
+The OECD study is based on a gravity model of migration, a commonly used
+framework for explaining flows between regions based on push and pull
+factors such as income differences, employment opportunities, and
+housing affordability.\\
+It uses panel data regressions with regional and temporal fixed effects,
+taking into account country-specific characteristics and economic
+cycles.
+
+\paragraph{Data sets used in related
+studies}\label{data-sets-used-in-related-studies}
+
+The analysis is based on a cross-country regional panel dataset
+(2000--2018) that combines harmonised national statistical sources from
+the OECD.\\
+The main variables include interregional migration flows, regional GDP
+per capita, unemployment rates, and real estate price indices.\\
+Switzerland is included as one of the 14 countries, but only as part of
+this broad comparative framework and not as a separate case study.
+
+\paragraph{Gap in existing research that the current project
+fills}\label{gap-in-existing-research-that-the-current-project-fills}
+
+While the OECD study identifies the general link between housing markets
+and internal migration, it does not examine how financial shocks, such
+as changes in mortgage rates, affect mobility, nor does it provide
+Switzerland-specific results at the cantonal level.
+
+This project fills this gap by: - Focusing exclusively on Switzerland
+and using a cantonal panel (2014--2024);\\
+- Incorporating a new variable, shock exposure, which captures how
+mortgage-rate fluctuations interact with local debt and homeownership
+structures;\\
+- Applying both fixed-effects econometric models and machine learning
+methods (ridge regression, random forest) to test for nonlinearities and
+regional heterogeneity.
+
+This approach extends the OECD framework by considering the conditions
+of real estate financing as a key factor in internal migration dynamics.
+
+\subsection{3. Methodology}\label{methodology}
+
+\subsubsection{3.1 Data description}\label{data-description}
+
+The dataset is a geographical panel analysing data from 2014 to 2024
+from 26 cantons. The number of observations is therefore 260. The most
+important variables are: - Migration rate: calculated as the ratio of
+the incoming population divided by the outgoing population. - Average
+rent: the average rent per canton per year, a direct indicator of
+housing market conditions and the cost of living. - Average income: the
+average income, which reflects the economic attractiveness of a canton
+and the purchasing power of households. - Unemployment rate: the
+unemployment rate, used as an indicator of the dynamism of the local
+labour market. - Mortgage rate change: the annual change in mortgage
+rates, which captures shocks related to housing finance conditions. -
+Housing construction per capita: new housing construction relative to
+population, measuring the adaptability of the housing supply. -
+Homeownership rate: the proportion of households that own their own
+homes, an indicator of the structure of the housing market. - Shock
+exposure: this variable measures the degree of exposure of a district to
+a mortgage shock, i.e.~a change in interest rates that affects the cost
+of housing and the purchasing power of owner-occupier households.
+
+It is calculated for each district and each year using the following
+formula:
+
+{[} \text{Shock exposure}\emph{\{it\} = 0.5 \times Z}\{\text{debt},i\} +
+0.5 \times Z\_\{\text{homeownership},i\}
+\times \Delta \text{mortgage rate}\_t {]}
+
+where: - ( Z\_\{\text{debt},i\} ) is the z-score of the average level of
+household debt in canton (i), - ( Z\_\{\text{homeownership},i\} ) is the
+z-score of the homeownership rate, - ( \Delta \text{mortgage rate}\_t )
+represents the annual change in the Swiss mortgage rate.
+
+This measure therefore combines structural sensitivity (level of debt
+and home ownership rate) and the magnitude of the financial shock
+(change in the mortgage rate).\\
+A canton with high debt and a high proportion of homeowners will be more
+exposed to the shock, while a canton with low debt or few homeowners
+will be less affected.
+
+All data was taken from the Federal Statistical Office and the Swiss
+National Bank. It was then compiled into an Excel file, which was
+subsequently converted into a .csv file. The database was constructed
+entirely by the author.
+
+\subsubsection{Technical Approach}\label{technical-approach}
+
+\paragraph{Algorithms}\label{algorithms}
+
+The analysis relies on double fixed-effects (FE) regressions as the main
+econometric framework.\\
+Each model applies a within transformation (double-demeaning) to remove
+canton and year effects before estimating coefficients by ordinary least
+squares.\\
+Three variants are implemented:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Baseline FE model -- estimates the core relationship between migration
+  rate and local housing and labour variables.\\
+\item
+  FE model with shock interactions -- adds interactions between
+  mortgage-rate shock exposure and regional clusters to identify
+  heterogeneous sensitivities.\\
+\item
+  Linear-log FE model -- includes log-transformed variables and
+  cross-effects such as log(rent) × log(income) to test for nonlinear
+  elasticities.
+\end{enumerate}
+
+Complementary K-means clustering is performed on z-score indicators and
+shock exposure to group cantons with similar structural profiles.\\
+These clusters are then used in the interaction terms to capture
+regional heterogeneity in the response to mortgage shocks.
+
+\paragraph{Preprocessing}\label{preprocessing}
+
+The pipeline filters out incomplete observations, enforces numeric
+typing, and merges the main panel dataset with cluster memberships
+before constructing interaction terms.\\
+Log-transformed variables are mean-centered prior to generating
+cross-products and interactions with the shock exposure index in the
+linear-log specification.\\
+The K-means workflow standardizes features implicitly by using only
+variables already expressed as z-scores, ensuring balanced weighting
+across indicators.
+
+\paragraph{Model Architecture}\label{model-architecture}
+
+All FE models follow the same structure: 1. Double-demeaning of
+dependent and explanatory variables.\\
+2. OLS estimation via direct solution or pseudo-inversion of ( X'X ).\\
+3. Computation of clustered standard errors by canton to correct for
+serial correlation within panels.\\
+The interaction terms between the shock exposure variable and the
+clusters (particularly clusters 1 and 2) reveal regional asymmetries in
+how mortgage shocks affect migration.\\
+Cluster profiles (k=3) are summarized using stylised averages of key
+housing and labour indicators to support interpretation.
+
+\paragraph{Evaluation Metrics}\label{evaluation-metrics}
+
+Model performance is assessed using: - Within R², measuring the
+explanatory power after removing canton and time effects (e.g.~0.0859
+for the baseline FE and 0.1136 for the linear-log model).\\
+- Clustered t-statistics and p-values to test coefficient significance
+and robustness.\\
+- Descriptive diagnostics (number of observations, cantons, and years)
+to confirm the panel's balance and reliability.
+
+These metrics jointly evaluate both statistical significance and
+substantive explanatory quality, allowing for consistent comparison
+across model variants.
+
+\subsubsection{3.3 Implementation}\label{implementation}
+
+This section describes the implementation details of the analytical
+framework, including the programming environment, overall system
+architecture, and the main code components used in the project.
+
+\paragraph{Languages and Libraries}\label{languages-and-libraries}
+
+The project is fully implemented in Python 3.11 using a compact,
+transparent set of libraries suited for econometric and data-driven
+analysis.\\
+The following packages are used:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{pandas} for data loading, filtering, merging, and cleaning the
+  canton--year panel dataset.\\
+\item
+  \texttt{numpy} for all numerical computations, including matrix
+  algebra, OLS estimation, and the K-means algorithm.\\
+\item
+  \texttt{pathlib} for file path management and directory handling.\\
+\item
+  \texttt{dataclasses} and \texttt{typing} for defining structured
+  containers (e.g., regression outputs) and ensuring type consistency.
+\end{itemize}
+
+\paragraph{System Architecture}\label{system-architecture}
+
+The system follows a modular, sequential workflow designed for clarity
+and reproducibility:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Data Preprocessing:} Load the canton--year panel from CSV,
+  drop incomplete rows, and ensure consistent numeric typing.
+\item
+  \textbf{Feature Engineering:} Create derived variables such as log
+  transformations, interaction terms, and the mortgage-rate shock
+  exposure index.
+\item
+  \textbf{Clustering:} Apply K-means to standardized z-score indicators
+  and shock exposure to classify cantons into structural groups.
+\item
+  \textbf{Regression Estimation:} Run two-way fixed-effects (FE) models
+  on the cleaned and enriched dataset using the same core estimation
+  routine.
+\item
+  \textbf{Output Generation:} Export coefficients, standard errors,
+  t-statistics, and summaries to the \texttt{/outputs/} directory for
+  interpretation and comparison.
+\end{enumerate}
+
+This modular structure allows each component to be developed, tested,
+and reused independently. The cluster outputs feed directly into the
+regression models without requiring manual intervention, ensuring a
+clean and reproducible workflow.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Simplified workflow structure}
+\NormalTok{panel }\OperatorTok{=}\NormalTok{ load\_data(}\StringTok{"panel\_choc\_taux\_suisse\_2014\_2024.csv"}\NormalTok{)}
+\NormalTok{panel }\OperatorTok{=}\NormalTok{ preprocess\_data(panel)}
+\NormalTok{clusters }\OperatorTok{=}\NormalTok{ run\_kmeans(panel[[}\StringTok{"rent\_z"}\NormalTok{, }\StringTok{"income\_z"}\NormalTok{, }\StringTok{"shock\_exposure"}\NormalTok{]], k}\OperatorTok{=}\DecValTok{3}\NormalTok{)}
+\NormalTok{panel }\OperatorTok{=}\NormalTok{ panel.merge(clusters, on}\OperatorTok{=}\StringTok{"canton"}\NormalTok{)}
+\NormalTok{results }\OperatorTok{=}\NormalTok{ run\_fe(panel, y}\OperatorTok{=}\StringTok{"migration\_rate"}\NormalTok{, X}\OperatorTok{=}\NormalTok{[}\StringTok{"rent"}\NormalTok{, }\StringTok{"income"}\NormalTok{, }\StringTok{"shock\_exposure"}\NormalTok{, }\StringTok{"cluster"}\NormalTok{])}
+\NormalTok{save\_summary(results, }\StringTok{"outputs/migration\_regression\_summary.txt"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\paragraph{Key Code Components}\label{key-code-components}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Data Preprocessing} Cleans missing data, enforces numeric
+  types, and merges cluster information before model estimation.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ preprocess\_data(df):}
+    \CommentTok{"""Drop missing values and ensure numeric typing."""}
+\NormalTok{    df }\OperatorTok{=}\NormalTok{ df.dropna()}
+\NormalTok{    df }\OperatorTok{=}\NormalTok{ df.}\BuiltInTok{apply}\NormalTok{(pd.to\_numeric, errors}\OperatorTok{=}\StringTok{"ignore"}\NormalTok{)}
+    \ControlFlowTok{return}\NormalTok{ df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Fixed-Effects Regression (FE)} Implements double-demeaning
+  (within transformation) to remove canton and year fixed effects before
+  estimating coefficients. This ensures that only within-canton
+  variations over time drive the estimated relationships.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ run\_fe(y, X, canton, year):}
+    \CommentTok{"""Two{-}way Fixed Effects regression."""}
+\NormalTok{    y\_i }\OperatorTok{=}\NormalTok{ y.groupby(canton).transform(}\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{)}
+\NormalTok{    y\_t }\OperatorTok{=}\NormalTok{ y.groupby(year).transform(}\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{)}
+\NormalTok{    y\_dd }\OperatorTok{=}\NormalTok{ y }\OperatorTok{{-}}\NormalTok{ y\_i }\OperatorTok{{-}}\NormalTok{ y\_t }\OperatorTok{+}\NormalTok{ y.mean()}
+\NormalTok{    X\_dd }\OperatorTok{=}\NormalTok{ X }\OperatorTok{{-}}\NormalTok{ X.groupby(canton).transform(}\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{) }\OperatorTok{{-}}\NormalTok{ X.groupby(year).transform(}\StringTok{\textquotesingle{}mean\textquotesingle{}}\NormalTok{) }\OperatorTok{+}\NormalTok{ X.mean()}
+\NormalTok{    beta }\OperatorTok{=}\NormalTok{ np.linalg.pinv(X\_dd.T }\OperatorTok{@}\NormalTok{ X\_dd) }\OperatorTok{@}\NormalTok{ (X\_dd.T }\OperatorTok{@}\NormalTok{ y\_dd)}
+\NormalTok{    residuals }\OperatorTok{=}\NormalTok{ y\_dd }\OperatorTok{{-}}\NormalTok{ X\_dd }\OperatorTok{@}\NormalTok{ beta}
+    \ControlFlowTok{return}\NormalTok{ beta, residuals}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Clustering Analysis} Groups cantons based on housing and
+  labour indicators (already standardized as z-scores) to identify
+  similar economic structures. The resulting clusters are later used in
+  the interaction models.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{def}\NormalTok{ run\_kmeans(X, k}\OperatorTok{=}\DecValTok{3}\NormalTok{, max\_iter}\OperatorTok{=}\DecValTok{300}\NormalTok{):}
+    \CommentTok{"""Basic K{-}means clustering using Euclidean distance."""}
+\NormalTok{    centroids }\OperatorTok{=}\NormalTok{ X.sample(k).to\_numpy()}
+    \ControlFlowTok{for}\NormalTok{ \_ }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(max\_iter):}
+\NormalTok{        distances }\OperatorTok{=}\NormalTok{ np.linalg.norm(X.to\_numpy()[:, }\VariableTok{None}\NormalTok{] }\OperatorTok{{-}}\NormalTok{ centroids[}\VariableTok{None}\NormalTok{, :], axis}\OperatorTok{=}\DecValTok{2}\NormalTok{)}
+\NormalTok{        labels }\OperatorTok{=}\NormalTok{ np.argmin(distances, axis}\OperatorTok{=}\DecValTok{1}\NormalTok{)}
+\NormalTok{        new\_centroids }\OperatorTok{=}\NormalTok{ np.array([X.to\_numpy()[labels }\OperatorTok{==}\NormalTok{ j].mean(axis}\OperatorTok{=}\DecValTok{0}\NormalTok{) }\ControlFlowTok{for}\NormalTok{ j }\KeywordTok{in} \BuiltInTok{range}\NormalTok{(k)])}
+        \ControlFlowTok{if}\NormalTok{ np.allclose(centroids, new\_centroids): }
+            \ControlFlowTok{break}
+\NormalTok{        centroids }\OperatorTok{=}\NormalTok{ new\_centroids}
+    \ControlFlowTok{return}\NormalTok{ pd.DataFrame(\{}\StringTok{"cluster"}\NormalTok{: labels\}, index}\OperatorTok{=}\NormalTok{X.index)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Results Dataclass} Stores all regression outputs in a
+  structured, reusable format for consistent access across different
+  models.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ImportTok{from}\NormalTok{ dataclasses }\ImportTok{import}\NormalTok{ dataclass}
+
+\AttributeTok{@dataclass}
+\KeywordTok{class}\NormalTok{ FEResult:}
+\NormalTok{    coefficients: np.ndarray}
+\NormalTok{    stderr\_cluster: np.ndarray}
+\NormalTok{    t\_stats: np.ndarray}
+\NormalTok{    p\_values: np.ndarray}
+\NormalTok{    r\_squared\_within: }\BuiltInTok{float}
+\NormalTok{    n\_obs: }\BuiltInTok{int}
+\NormalTok{    n\_cantons: }\BuiltInTok{int}
+\NormalTok{    n\_years: }\BuiltInTok{int}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+This implementation ensures full transparency and replicability. Each
+script operates as a self-contained step in the analytical chain,
+producing standardized outputs. The combination of manual econometric
+routines and modular design allows precise control of estimation
+procedures while maintaining an intuitive workflow for future
+extensions.
+
+\subsection{3. Empirical Strategy}\label{empirical-strategy}
+
+\begin{itemize}
+\tightlist
+\item
+  Regression and clustering specifications you estimate.\\
+\item
+  Mention fixed effects, lags, interaction terms, and clustering of
+  standard errors.\\
+\item
+  Describe any machine-learning components (e.g., random forest,
+  PDP/SHAP).
+\end{itemize}
+
+\subsection{4. Results}\label{results}
+
+\subsubsection{4.1 Experimental Setup}\label{experimental-setup}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Hardware:} Apple T8103 (M1) 8-core CPU running Darwin 23.3.0;
+  no discrete GPU was required and all calculations were CPU-bound.
+\item
+  \textbf{Software:} Python 3.13.7 with the project's scripts depending
+  on \texttt{numpy} for linear algebra and \texttt{pandas} for panel
+  manipulation (versions supplied by the active virtual
+  environment/conda environment). Command-line execution relied on the
+  repository's layout discovered via \texttt{find\_project\_root}.
+\item
+  \textbf{Hyperparameters:} Not applicable---fixed-effects regressions
+  are solved in closed form with no learning rate, batch size, or
+  regularisation grid. K-means clustering uses a deterministic seed
+  (\texttt{seed=42}) and iterates until centroid shift \textless{}
+  \texttt{1e-4}.
+\item
+  \textbf{Training details:} Regression models run a single ordinary
+  least squares fit after double-demeaning; no epochs or
+  cross-validation are involved. The clustering routine evaluates k ∈
+  \{2,\ldots,6\} and retains k=3 based on inertia diagnostics.
+\end{itemize}
+
+\subsubsection{4.2 Performance Evaluation}\label{performance-evaluation}
+
+Within-panel fit and inference metrics come from the generated
+summaries. The lin-log specification with shock interactions achieves a
+within R² of 0.1136 and highlights the joint effect of housing costs and
+income on migration.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Variable & Coef. & Cl.SE & t & P\textgreater\textbar t\textbar{} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+log\_rent\_avg & 1.580626 & 0.536969 & 2.944 & 0.0036 \\
+log\_avg\_income & 0.459966 & 3.736042 & 0.123 & 0.9021 \\
+log\_unemployment & 0.032405 & 0.183643 & 0.176 & 0.8601 \\
+log\_rent\_x\_income & -2.384819 & 0.691916 & -3.447 & 0.0007 \\
+shock\_exposure & 0.130602 & 0.177616 & 0.735 & 0.4629 \\
+shock\_x\_rent & -2.228120 & 1.899185 & -1.173 & 0.2420 \\
+shock\_x\_income & 1.679555 & 1.242619 & 1.352 & 0.1779 \\
+shock\_x\_unemployment & -0.064497 & 0.151107 & -0.427 & 0.6699 \\
+\end{longtable}
+}
+
+Baseline FE and cluster-interaction summaries corroborate these
+patterns, and the detailed cluster profiles will be added once the
+dedicated summary is finalised.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Variable & Cluster 0 & Cluster 1 & Cluster 2 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Income & --0.45 & +1.62 & --0.12 \\
+Rent & --0.37 & +1.45 & --0.18 \\
+Unemployment & --0.24 & --0.72 & +1.04 \\
+Migration & +0.40 & +0.07 & --0.94 \\
+Debt / Ownership & low & medium & high \\
+Interest Rate Shock & neutral & positive & negative \\
+\end{longtable}
+}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Cluster 1:} Metropolitan, high-pressure housing markets with
+  strong fundamentals.\\
+\item
+  \textbf{Cluster 0:} Stable mid-range cantons showing balanced economic
+  dynamics.\\
+\item
+  \textbf{Cluster 2:} Peripheral or industrial regions more sensitive to
+  macro shocks and out-migration.
+\end{itemize}
+
+This table summarizes the results of a K-means clustering applied to
+Swiss cantonal data (k = 3). The clusters group cantons with similar
+economic, housing, and labor market profiles.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+Variable & Coef. & Cl.SE & t & P\textgreater\textbar t\textbar{} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+log\_rent\_avg & 1.455220 & 0.593961 & 2.450 & 0.0151 \\
+log\_avg\_income & 0.253350 & 3.744353 & 0.068 & 0.9461 \\
+unemployment\_rate & -0.006311 & 0.054092 & -0.117 & 0.9072 \\
+housing\_construction\_pc & 4.624182 & 3.820606 & 1.210 & 0.2275 \\
+shock\_exposure & -0.452949 & 0.140680 & -3.220 & 0.0015 \\
+shock × cluster 1 & 0.920105 & 0.194183 & 4.738 & \textless0.0001 \\
+shock × cluster 2 & 0.077543 & 0.587470 & 0.132 & 0.8951 \\
+\end{longtable}
+}
+
+Within R² = 0.0754; observations = 260 (26 cantons × 10 years). Standard
+errors are clustered by canton.
+
+\subsubsection{4.3 Baseline Regressions}\label{baseline-regressions}
+
+\begin{itemize}
+\tightlist
+\item
+  Table reference (e.g.,
+  \texttt{analyses\_finalproject/outputs/regression\_models/summaries/...}).\\
+\item
+  Interpretation of significant coefficients, economic magnitude, and
+  sign.
+\end{itemize}
+
+\subsubsection{4.4 Shock Exposure
+Analyses}\label{shock-exposure-analyses}
+
+\begin{itemize}
+\tightlist
+\item
+  Summaries of FE with shock interactions, lagged effects, cluster
+  heterogeneity.\\
+\item
+  Highlight which interactions become significant and what they imply.
+\end{itemize}
+
+\subsubsection{4.5 Additional Analyses}\label{additional-analyses}
+
+\begin{itemize}
+\tightlist
+\item
+  Correlations, dynamic plots, or other models (e.g., log--log variants,
+  marginal effects).\\
+\item
+  Comment on robustness checks or alternative specifications.
+\end{itemize}
+
+\subsection{5. Visualisations \& Tables}\label{visualisations-tables}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4828}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3103}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2069}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Figure/Table
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Purpose
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+File
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Fig. 1 & Migration vs.~shock exposure by cluster &
+\texttt{analyses\_finalproject/outputs/cluster\_analysis/shock\_effects/...} \\
+Table 1 & Baseline FE regres\textbf{Policy-oriented summary of the
+research proposal} & \\
+\end{longtable}
+}
+
+\begin{itemize}
+\tightlist
+\item
+  The study aims to \textbf{understand what drives people to move
+  between Swiss cantons}, focusing on how local housing and job market
+  conditions shape these movements.
+\item
+  It uses \textbf{10 years of cantonal data (2014--2024)} from the Swiss
+  Federal Statistical Office, covering migration, housing, income, and
+  employment indicators.
+\item
+  The project will compare \textbf{three analytical approaches}: a basic
+  linear model (OLS), a version that reduces bias from correlated
+  variables (Ridge regression), and a machine-learning model (Random
+  Forest) to detect complex or nonlinear effects.
+\item
+  A \textbf{time-based validation} will test how well each model
+  predicts migration trends in recent years, ensuring findings are
+  robust and not overfitted.
+\item
+  An additional \textbf{clustering analysis} will group cantons with
+  similar long-term housing and economic patterns, helping to identify
+  regional typologies.
+\item
+  The ultimate goal is to provide \textbf{evidence-based insights} to
+  policymakers on how housing costs, job opportunities, and mortgage
+  changes jointly influence population movements across Switzerland.
+  sion \textbar{}
+  \texttt{analyses\_finalproject/outputs/regression\_models/summaries/migration\_regression\_fe\_baseline.txt}
+  \textbar{}
+\end{itemize}
+
+\begin{quote}
+Update the table as you generate new material. Reference figures in the
+text using the same labels.
+\end{quote}
+
+\subsection{6. Discussion}\label{discussion}
+
+\begin{itemize}
+\tightlist
+\item
+  Economic interpretation: what drives migration changes?\\
+\item
+  Do the results align with your intuition and prior literature?\\
+\item
+  Policy implications (e.g., cantonal housing policy, mortgage
+  regulation).
+\end{itemize}
+
+\subsection{7. Limitations \& Next Steps}\label{limitations-next-steps}
+
+\begin{itemize}
+\tightlist
+\item
+  Data gaps, measurement issues, or identification challenges.\\
+\item
+  Planned extensions (e.g., richer dynamic models, alternative
+  clustering).
+\end{itemize}
+
+\subsection{References}\label{references}
+
+\begin{itemize}
+\tightlist
+\item
+  Format bibliographic entries (APA/Chicago).\\
+\item
+  Include datasets, academic papers, or official reports cited in the
+  text.
+\end{itemize}
+
+\subsection{Appendix (Optional)}\label{appendix-optional}
+
+\begin{itemize}
+\tightlist
+\item
+  Additional tables, regression outputs, or diagnostic plots.\\
+\item
+  Document code locations (\texttt{analyses\_finalproject/code/...}) for
+  reproducibility.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Editing Guidelines}\label{editing-guidelines}
+
+\begin{itemize}
+\tightlist
+\item
+  Write in Markdown; GitHub will render headings, lists, and tables
+  automatically.\\
+\item
+  Keep file paths relative to the repo.\\
+\item
+  When embedding images in the report later, use
+  \texttt{!{[}caption{]}(relative/path.png)}.\\
+\item
+  Maintain concise sections---aim for 10--12 pages when exported to PDF.
+\end{itemize}
+
+\end{document}
