@@ -12,6 +12,19 @@ os.environ.setdefault("MPLCONFIGDIR", "results/.mpl_cache")
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+plt.rcParams.update(
+    {
+        "figure.dpi": 150,
+        "savefig.dpi": 150,
+        "axes.titlesize": 12,
+        "axes.labelsize": 10,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
+        "legend.fontsize": 9,
+        "axes.spines.top": False,
+        "axes.spines.right": False,
+    }
+)
 
 def regression_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float]:
     """Compute regression metrics."""
@@ -180,6 +193,155 @@ def plot_feature_importance(
     plt.figure(figsize=(8, 6))
     plt.barh(top["feature"], top["importance"], color="#4c78a8")
     plt.xlabel("Importance")
+    plt.title(title)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=150)
+    plt.close()
+
+
+def plot_k_selection(
+    k_values: list[int],
+    silhouette_scores: list[float],
+    inertias: list[float],
+    out_path: Path,
+    title: str,
+) -> None:
+    """Plot silhouette and inertia for K selection."""
+    fig, ax1 = plt.subplots(figsize=(7, 4))
+    ax1.plot(k_values, silhouette_scores, marker="o", color="#4c78a8", label="Silhouette")
+    ax1.set_xlabel("k")
+    ax1.set_ylabel("Silhouette")
+    ax1.set_ylim(0, max(silhouette_scores) * 1.1 if silhouette_scores else 1)
+
+    ax2 = ax1.twinx()
+    ax2.plot(k_values, inertias, marker="s", color="#f58518", label="Inertia")
+    ax2.set_ylabel("Inertia")
+
+    lines, labels = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines + lines2, labels + labels2, loc="best")
+    ax1.set_title(title)
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+
+
+def plot_cluster_profile(
+    profile_df: pd.DataFrame,
+    out_path: Path,
+    title: str,
+    value_col: str = "mean_Global_Sales",
+) -> None:
+    """Plot a simple cluster profile bar chart."""
+    plt.figure(figsize=(7, 4))
+    plt.bar(profile_df["cluster"].astype(str), profile_df[value_col], color="#54a24b")
+    plt.xlabel("Cluster")
+    plt.ylabel(value_col.replace("_", " "))
+    plt.title(title)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=150)
+    plt.close()
+
+
+def plot_cluster_profile_multi(
+    profile_df: pd.DataFrame,
+    out_path: Path,
+    title: str,
+    metrics: list[str],
+    labels: list[str],
+) -> None:
+    """Plot multiple cluster profile metrics in a 2x2 grid."""
+    if len(metrics) != len(labels):
+        raise ValueError("metrics and labels must have the same length")
+    n = len(metrics)
+    rows = 2
+    cols = 2
+    fig, axes = plt.subplots(rows, cols, figsize=(8, 6))
+    axes = axes.flatten()
+
+    for i, (metric, label) in enumerate(zip(metrics, labels)):
+        ax = axes[i]
+        ax.bar(profile_df["cluster"].astype(str), profile_df[metric], color="#4c78a8")
+        ax.set_title(label)
+        ax.set_xlabel("Cluster")
+    # Hide any unused axes
+    for j in range(n, rows * cols):
+        fig.delaxes(axes[j])
+
+    fig.suptitle(title)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+
+
+def plot_cluster_profile_summary(
+    profile_df: pd.DataFrame,
+    out_path: Path,
+    title: str,
+) -> None:
+    """Plot a readable cluster summary: sales bars + top categories table."""
+    fig = plt.figure(figsize=(9, 4.8))
+    gs = fig.add_gridspec(1, 2, width_ratios=[1.0, 1.3])
+
+    # Left: mean sales bar chart
+    ax_bar = fig.add_subplot(gs[0, 0])
+    ax_bar.bar(
+        profile_df["cluster"].astype(str),
+        profile_df["mean_Global_Sales"],
+        color="#4c78a8",
+    )
+    ax_bar.set_xlabel("Cluster")
+    ax_bar.set_ylabel("Mean Global Sales")
+    ax_bar.set_title("Sales by Cluster")
+
+    # Right: table with top categories
+    ax_tbl = fig.add_subplot(gs[0, 1])
+    ax_tbl.axis("off")
+
+    def _shorten(text: str, max_len: int = 28) -> str:
+        text = str(text)
+        return text if len(text) <= max_len else text[: max_len - 3] + "..."
+
+    table_df = profile_df[["cluster", "top_platforms", "top_genres", "top_publishers"]].copy()
+    table_df["top_platforms"] = table_df["top_platforms"].map(_shorten)
+    table_df["top_genres"] = table_df["top_genres"].map(_shorten)
+    table_df["top_publishers"] = table_df["top_publishers"].map(_shorten)
+
+    table = ax_tbl.table(
+        cellText=table_df.values,
+        colLabels=["Cluster", "Top Platforms", "Top Genres", "Top Publishers"],
+        cellLoc="left",
+        loc="center",
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(8)
+    table.scale(1, 1.2)
+    ax_tbl.set_title("Top Categories", pad=6)
+
+    fig.suptitle(title)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+
+
+def plot_cluster_profile_metric(
+    profile_df: pd.DataFrame,
+    out_path: Path,
+    title: str,
+    metric: str,
+    y_label: str,
+) -> None:
+    """Plot a single cluster metric as a clean bar chart."""
+    plt.figure(figsize=(6, 4))
+    plt.bar(profile_df["cluster"].astype(str), profile_df[metric], color="#4c78a8")
+    plt.xlabel("Cluster")
+    plt.ylabel(y_label)
     plt.title(title)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     plt.tight_layout()

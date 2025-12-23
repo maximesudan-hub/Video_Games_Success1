@@ -1,19 +1,17 @@
 from pathlib import Path
+import numpy as np
 import pandas as pd
 
 from src.models import (
     ProjectSpec,
     make_regression_xy,
     make_classification_xy,
-    make_feature_matrix,
     split_train_test,
     get_regression_models,
     get_classification_models,
-    get_clustering_pipeline,
-    get_pca_pipeline,
+    get_cluster_numeric_features,
     train_and_predict_regression,
     train_and_predict_classifier,
-    fit_predict_clusters,
 )
 from src.evaluation import (
     regression_metrics,
@@ -21,12 +19,13 @@ from src.evaluation import (
     plot_pred_vs_true,
     classification_metrics,
     save_classification_metrics_table,
-    plot_confusion_matrix,
     plot_roc_curve,
     clustering_metrics,
     save_clustering_metrics,
     plot_pca_clusters,
     plot_feature_importance,
+    plot_cluster_profile_summary,
+    plot_cluster_profile_metric,
 )
 
 
@@ -124,12 +123,6 @@ def main() -> None:
     print(cls_df)
 
     best_cls_name = cls_df.index[0]
-    plot_confusion_matrix(
-        y_test.to_numpy(),
-        cls_preds[best_cls_name],
-        out_path=Path("results/figures/classification_confusion_matrix.png"),
-        title=f"Confusion Matrix — {best_cls_name}",
-    )
     if cls_probas[best_cls_name] is not None:
         plot_roc_curve(
             y_test.to_numpy(),
@@ -138,23 +131,96 @@ def main() -> None:
             title=f"ROC Curve — {best_cls_name}",
         )
 
-    # --- Clustering
-    X_cluster = make_feature_matrix(df)
-    kmeans_pipe = get_clustering_pipeline(n_clusters=4, random_state=spec.random_state)
-    labels = fit_predict_clusters(kmeans_pipe, X_cluster)
-    X_transformed = kmeans_pipe.named_steps["preprocess"].transform(X_cluster)
-    kmeans_model = kmeans_pipe.named_steps["model"]
-    cluster_metrics = clustering_metrics(X_transformed, labels, model=kmeans_model)
+    # --- Clustering (numeric-only for clearer segments)
+    from sklearn.cluster import MiniBatchKMeans
+    from sklearn.impute import SimpleImputer
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+
+    num_cols = get_cluster_numeric_features()
+    X_cluster = df[num_cols].copy()
+    imputer = SimpleImputer(strategy="median")
+    scaler = StandardScaler()
+    X_imputed = imputer.fit_transform(X_cluster)
+    X_transformed = scaler.fit_transform(X_imputed)
+
+    k_values = list(range(2, 7))
+    silhouettes = []
+    inertias = []
+    labels_by_k = {}
+    for k in k_values:
+        kmeans_model = MiniBatchKMeans(n_clusters=k, n_init="auto", random_state=spec.random_state)
+        labels = kmeans_model.fit_predict(X_transformed)
+        labels_by_k[k] = labels
+        inertias.append(float(kmeans_model.inertia_))
+
+        # silhouette on a subsample if large
+        if X_transformed.shape[0] > 3000:
+            rng = np.random.default_rng(spec.random_state)
+            idx = rng.choice(X_transformed.shape[0], size=3000, replace=False)
+            sil = clustering_metrics(X_transformed[idx], labels[idx]).get("Silhouette", 0.0)
+        else:
+            sil = clustering_metrics(X_transformed, labels).get("Silhouette", 0.0)
+        silhouettes.append(sil)
+
+    best_k = 3
+    best_labels = labels_by_k[best_k]
+    cluster_metrics = {
+        "Best_k": best_k,
+        "Silhouette": silhouettes[k_values.index(best_k)],
+        "Inertia": inertias[k_values.index(best_k)],
+    }
     cluster_metrics_path = Path("results/metrics/clustering_metrics.csv")
     save_clustering_metrics(cluster_metrics, cluster_metrics_path)
+    # Profile clusters
+    profile_rows = []
+    for k in sorted(set(best_labels)):
+        subset = df[best_labels == k]
+        row = {
+            "cluster": k,
+            "size": len(subset),
+            "mean_Global_Sales": subset["Global_Sales"].mean(),
+            "mean_Log_Sales": subset["Log_Sales"].mean(),
+            "mean_Critic_Score": subset["Critic_Score"].mean(),
+            "mean_Critic_Count": subset["Critic_Count"].mean(),
+            "mean_User_Score_100": subset["User_Score_100"].mean(),
+            "mean_User_Count": subset["User_Count"].mean(),
+            "mean_Year_of_Release": subset["Year_of_Release"].mean(),
+            "top_platforms": ", ".join(subset["Platform"].value_counts().head(3).index),
+            "top_genres": ", ".join(subset["Genre"].value_counts().head(3).index),
+            "top_publishers": ", ".join(subset["Publisher"].value_counts().head(3).index),
+        }
+        profile_rows.append(row)
+    profile_df = pd.DataFrame(profile_rows).sort_values(by="cluster")
+    profile_path = Path("results/metrics/clustering_profile.csv")
+    profile_path.parent.mkdir(parents=True, exist_ok=True)
+    profile_df.to_csv(profile_path, index=False)
+    plot_cluster_profile_summary(
+        profile_df,
+        out_path=Path("results/figures/clustering_profile_overview.png"),
+        title=f"Cluster Overview (k={best_k})",
+    )
+    plot_cluster_profile_metric(
+        profile_df,
+        out_path=Path("results/figures/clustering_profile_sales.png"),
+        title="Mean Global Sales by Cluster",
+        metric="mean_Global_Sales",
+        y_label="Mean Global Sales",
+    )
+    plot_cluster_profile_metric(
+        profile_df,
+        out_path=Path("results/figures/clustering_profile_critic_count.png"),
+        title="Mean Critic Count by Cluster",
+        metric="mean_Critic_Count",
+        y_label="Mean Critic Count",
+    )
 
-    pca_pipe = get_pca_pipeline()
-    X_pca = pca_pipe.fit_transform(X_cluster)
+    X_pca = PCA(n_components=2, random_state=spec.random_state).fit_transform(X_transformed)
     plot_pca_clusters(
         X_pca,
-        labels,
+        best_labels,
         out_path=Path("results/figures/clustering_pca.png"),
-        title="PCA Clusters (KMeans)",
+        title=f"PCA Clusters (k={best_k})",
     )
 
     print("\nSaved:")
@@ -163,9 +229,12 @@ def main() -> None:
     print("- results/metrics/feature_importance.csv")
     print("- results/figures/feature_importance.png")
     print(f"- {cls_metrics_path}")
-    print("- results/figures/classification_confusion_matrix.png")
     print("- results/figures/classification_roc_curve.png")
     print(f"- {cluster_metrics_path}")
+    print("- results/metrics/clustering_profile.csv")
+    print("- results/figures/clustering_profile_overview.png")
+    print("- results/figures/clustering_profile_sales.png")
+    print("- results/figures/clustering_profile_critic_count.png")
     print("- results/figures/clustering_pca.png")
 
 

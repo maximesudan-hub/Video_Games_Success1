@@ -162,6 +162,16 @@ def _cluster_preprocessor() -> Any:
     )
 
 
+def get_cluster_preprocessor() -> Any:
+    """Return the clustering preprocessor (fit on full data)."""
+    return _cluster_preprocessor()
+
+
+def get_cluster_numeric_features() -> list[str]:
+    """Return numeric features used for numeric-only clustering."""
+    return NUM_FEATURES
+
+
 def get_regression_models(random_state: int = 42) -> Dict[str, Any]:
     """Return model pipelines."""
     from sklearn.ensemble import RandomForestRegressor, HistGradientBoostingRegressor
