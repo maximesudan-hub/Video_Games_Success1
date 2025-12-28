@@ -4,6 +4,12 @@ The project is implemented in Python 3.13 using \texttt{scikit-learn},
 \texttt{pandas}, and \texttt{numpy}. The codebase is modular, with
 separate modules for data preprocessing, model training, and evaluation.
 
+\paragraph{Pipeline structure}
+Each model is wrapped in a \texttt{Pipeline} with a \texttt{ColumnTransformer} that handles numeric and categorical features. This ensures consistent preprocessing, prevents leakage, and allows direct comparison across algorithms.
+
+\paragraph{Outputs}
+All metrics are saved to \texttt{results/metrics/} and figures to \texttt{results/figures/}. The main script prints a summary of model performance and writes CSV tables used in the report.
+
 \paragraph{Key technical challenges}
 The main implementation challenges were:
 \begin{enumerate}

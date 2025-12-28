@@ -1,7 +1,7 @@
 % ==============================
 \section{Results}
 % ==============================
-This section presents the empirical results of the predictive models. We compare linear and non-linear approaches for regression, evaluate classification performance for success prediction, and summarize clustering results. All models use an 80/20 train--test split with fixed random seeds.
+This section presents the empirical results of the predictive models. We compare linear and nonlinear approaches for regression, evaluate classification performance for success prediction, and summarize clustering results. All models use an 80/20 train--test split with fixed random seeds.
 
 \subsection{Experimental Setup}
 
@@ -15,6 +15,8 @@ This section presents the empirical results of the predictive models. We compare
 \subsection{Performance Evaluation}
 \subsubsection{Regression performance}
 Table~\ref{tab:reg_metrics} summarizes regression performance. HistGradientBoosting is the best model with $R^2 = 0.560$ and RMSE $= 0.215$ on the test set. Figure~\ref{fig:pred_true} shows predicted versus true Log\_Sales for the best model.
+\paragraph{Interpretation}
+The regression results indicate moderate predictive power. The scatter plot shows that predictions track overall trends but under-estimate extremes, which is expected in sales data with heavy tails. Linear models remain competitive but are consistently outperformed by boosting. The performance gap between linear and boosting models suggests meaningful nonlinear structure (platform $\times$ engagement $\times$ timing).
 \begin{table}[H]
 \centering
 \small
@@ -49,9 +51,11 @@ Feature importance from Random Forest indicates that engagement variables (User 
 
 \subsubsection{Classification performance}
 Table~\ref{tab:cls_metrics} reports classification metrics for the success label (Global\_Sales $> 1$M). The Random Forest classifier achieves ROC-AUC $= 0.874$.
+\paragraph{Interpretation}
+Despite high ROC-AUC, recall remains modest, indicating that the classifier is conservative in predicting success. This is consistent with class imbalance and the fact that truly high-selling titles are rare. High ROC-AUC with moderate recall/F1 implies strong ranking performance but threshold sensitivity: the model separates successful titles well, yet defaults to cautious positive predictions.
 \begin{table}[H]
 \centering
-\small
+\scriptsize
 \begin{tabular}{lccccc}
 \toprule
 Model & Acc. & Prec. & Recall & F1 & ROC-AUC \\
@@ -71,7 +75,29 @@ Logistic Reg. & 0.924 & 0.744 & 0.302 & 0.430 & 0.858 \\
 \end{figure}
 
 \subsubsection{Clustering}
-Numeric-only KMeans with $k=3$ produces clear segments (silhouette $= 0.243$). Figure~\ref{fig:cluster_pca} visualizes clusters in 2D, and Figure~\ref{fig:cluster_profile} summarizes dominant platforms, genres, and sales levels.
+Numeric-only K-means with $k=3$ yields moderately separated segments (silhouette $= 0.243$). Figure~\ref{fig:cluster_pca} visualizes clusters in 2D. Figures~\ref{fig:cluster_sales} and~\ref{fig:cluster_critic} compare mean Global\_Sales and mean Critic\_Count across clusters to provide descriptive context.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{clustering_pca.png}
+\caption{PCA visualization of clusters (k=3).}
+\label{fig:cluster_pca}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{clustering_profile_sales.png}
+\caption{Mean Global Sales by cluster (millions of units).}
+\label{fig:cluster_sales}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{clustering_profile_critic_count.png}
+\caption{Mean Critic Count by cluster.}
+\label{fig:cluster_critic}
+\end{figure}
+\paragraph{Interpretation}
+Clusters provide descriptive segmentation rather than strong separation. One cluster concentrates higher-engagement, higher-sales titles, while others group lower-visibility or older-platform games. This is exploratory and complements the predictive findings.
 \begin{table}[H]
 \centering
 \small
@@ -82,24 +108,9 @@ $k$ & Silhouette & Inertia \\
 3 & 0.243 & 38037.58 \\
 \bottomrule
 \end{tabular}
-\caption{Clustering metrics (numeric-only KMeans).}
+\caption{Clustering metrics (numeric-only K-means).}
 \label{tab:cluster_metrics}
 \end{table}
 
-\paragraph{Cluster descriptions.}
-Cluster~1 (n=1{,}148) corresponds to high-engagement, high-sales titles with the strongest critic reception (mean Global\_Sales $\approx 1.17$, Critic\_Score $\approx 81$) and very large user counts; top platforms include X360/PS3/PC with Action and Shooter dominant.
-Cluster~0 (n=5{,}060) contains lower-sales games with modest critic scores (mean Global\_Sales $\approx 0.26$, Critic\_Score $\approx 61$), dominated by PS3/DS/X360 and Action/Misc/Sports.
-Cluster~2 (n=4{,}941) is a mid-range group with slightly higher sales and scores than Cluster~0 (mean Global\_Sales $\approx 0.31$, Critic\_Score $\approx 68$), older on average (mean release year $\approx 2007$), and concentrated on DS/PS2/Wii with Action/Sports/Misc.
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{clustering_pca.png}
-\caption{PCA visualization of clusters (k=3).}
-\label{fig:cluster_pca}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{clustering_profile_overview.png}
-\caption{Cluster overview: sales and dominant categories (k=3).}
-\label{fig:cluster_profile}
-\end{figure}
+\paragraph{Cluster descriptions (condensed).}
+Cluster~1 corresponds to higher-engagement, higher-sales titles with the strongest critic reception; Cluster~0 captures lower-sales games with modest critic scores; Cluster~2 is a mid-range group that is older on average. Full profiles are available in the appendix.

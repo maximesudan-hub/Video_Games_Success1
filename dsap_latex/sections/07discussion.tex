@@ -4,6 +4,29 @@ The results highlight clear differences in predictive performance across modelin
 
 Across models, engagement and visibility variables (Critic/User counts) consistently emerge as top predictors, suggesting that attention and reach matter as much as average review quality. Platform and publisher effects also contribute substantially, indicating that distribution channels and marketing capabilities shape commercial outcomes.
 
-Clustering based on numeric signals yields three interpretable groups: lower-engagement titles, mid-range games, and high-visibility titles with stronger sales. The PCA visualization shows partial separation, consistent with the moderate silhouette score, and reinforces that success is driven by a combination of quality signals and market reach.
+Clustering based on numeric signals yields three exploratory groups with partial separation, consistent with the moderate silhouette score, and provides descriptive context rather than causal or predictive claims.
 
-Overall, the findings support the central research question: success is not driven by a single factor but by a combination of reception, exposure, and market context. The choice of model depends on the objective: boosting for best prediction, random forest for explanatory insights.
+Overall, the findings support the central research question: success is not driven by a single factor but by a combination of reception, exposure, and market context. The choice of model depends on the objective: HistGradientBoosting for best prediction, Random Forest for explanatory insights. Feature importance reflects predictive relevance and should not be interpreted as causal effects.
+
+\paragraph{Limitations}
+The analysis relies on post-release signals (critic and user feedback), which can be influenced by popularity and marketing. This introduces endogeneity and limits causal interpretation. In addition, the dataset does not include direct measures of marketing spend, franchise strength, or advertising reach, which are likely important determinants of sales.
+
+\paragraph{Practical implications}
+For decision-making, engagement signals (counts) provide early indicators of market traction. However, they should be complemented with pre-release indicators in future work to improve causal interpretability.
+\paragraph{Endogeneity and interpretation}
+Variables such as Critic\_Count and User\_Count reflect attention and may increase \emph{because} a game is already successful. As a result, these features can inflate predictive performance without proving causality. The report therefore treats feature importance as an explanatory signal rather than a causal mechanism.
+
+\paragraph{Predictive vs. explanatory goals}
+The project is explicitly predictive: the goal is to estimate sales and identify strong correlates. This is different from estimating causal effects. A high-performing model can still rely on variables that are not actionable at release time. This distinction is emphasized to avoid over-interpretation of coefficients or importances.
+
+\paragraph{Actionability of signals}
+From a business perspective, some predictors are actionable (platform selection, release timing), while others are not (post-release review counts). This matters when translating findings into decisions. The report therefore highlights which variables should be interpreted as signals of market traction rather than levers that can be directly controlled.
+
+\paragraph{Temporal and platform shifts}
+The dataset ends in 2016 and underrepresents newer distribution models (live-service, early access). Platform cycles and consumer behavior have evolved since then. These shifts limit generalization and suggest that the relationships documented here may weaken or change for newer releases.
+
+\paragraph{Data limitations and external validity}
+The Kaggle dataset relies on VGChartz sales estimates and Metacritic scores, both of which are imperfect proxies for the true market. Sales estimates may be noisy for smaller titles or regional releases, and review scores may reflect platform-specific biases. The results should therefore be interpreted as indicative rather than definitive.
+
+\paragraph{Robustness and generalizability}
+Model performance is evaluated on a held-out split with fixed random seeds, but the dataset still reflects historical market conditions up to 2016. Future releases and platform shifts could change these relationships. In particular, digital distribution and live-service models may alter how reviews and visibility translate into sales.

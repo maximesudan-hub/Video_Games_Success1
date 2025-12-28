@@ -27,22 +27,33 @@ Core models are supervised regressions and classifiers:
 \item \textbf{Random Forest} and \textbf{HistGradientBoosting} for nonlinear regression.
 \item \textbf{Logistic Regression} and \textbf{Random Forest Classifier} for success prediction.
 \end{enumerate}
-A complementary \textbf{KMeans} clustering on numeric features (scores, counts, release year) groups games into interpretable segments.
+A complementary \textbf{K-means} clustering on numeric features (scores, counts, release year) groups games into interpretable segments.
 
 \paragraph{Preprocessing}
 \begin{itemize}
 \item Numeric features are imputed (median) and scaled when required.
 \item Categorical features are one-hot encoded for linear models and ordinal-encoded for tree models.
-\item Train/test split: 80/20 with fixed \texttt{random\_state=42}.
+\item Train/test split: 80/20 with fixed random seed (\texttt{random\_state} = 42).
 \item Success label: $\text{Global\_Sales} > 1$ (million units).
 \end{itemize}
+
+\paragraph{Feature selection and leakage control}
+Sales variables (Global\_Sales and regional sales) are excluded from the feature set to avoid leakage. The model uses descriptive metadata (platform, genre, publisher, developer, rating, release year) and reception indicators (critic and user scores/counts). Review counts and scores are post-release signals, so they are treated as predictive indicators rather than causal drivers.
+
+\paragraph{Target transformation}
+Global sales are highly skewed, so regression targets use $\log(1+\text{Global\_Sales})$ to stabilize variance and improve model fit. This transformation reduces the influence of extreme blockbuster titles.
+\paragraph{Why log1p(Global\_Sales)}
+Sales distributions are heavy-tailed: a small number of blockbuster titles dominate the upper tail. Using $\log(1+\text{Global\_Sales})$ compresses extreme values and makes the target closer to a normal distribution, which benefits both linear models and tree-based regressors. The transformation also yields errors that are closer to relative (percentage) deviations rather than absolute units, which is more meaningful when comparing low- and high-selling games.
 
 \paragraph{Model Architecture}
 \begin{itemize}
 \item Regression: fit pipelines, predict Log\_Sales, evaluate with RMSE and $R^2$.
 \item Classification: fit pipelines, predict success, evaluate with Accuracy/Precision/Recall/F1 and ROC-AUC.
-\item Clustering: numeric-only KMeans after imputation and standardization; PCA for 2D visualization.
+\item Clustering: numeric-only K-means after imputation and standardization; PCA for 2D visualization.
 \end{itemize}
+
+\paragraph{Evaluation protocol}
+All metrics are computed on the held-out test set. For classification, ROC-AUC is reported to avoid reliance on a single threshold. Figures include a prediction-vs-true scatter (regression), a ROC curve (classification), and PCA visualizations for clustering.
 
 \paragraph{Evaluation Metrics}
 \begin{itemize}
@@ -50,14 +61,29 @@ A complementary \textbf{KMeans} clustering on numeric features (scores, counts, 
 \item Classification: Accuracy, Precision, Recall, F1, and ROC-AUC.
 \item Interpretation: Random Forest feature importance (post-encoding).
 \end{itemize}
+
+\paragraph{Why this pipeline answers the research question}
+The research question is explanatory, but the evidence is empirical and predictive. The pipeline first estimates sales outcomes, then identifies which variables drive predictive performance (feature importance), and finally checks whether distinct game segments emerge through clustering. This combination provides both quantitative performance and an interpretable ranking of factors, which directly addresses the question of what explains commercial success.
+
+\paragraph{Why these metrics}
+RMSE measures average prediction error in the same scale as the target, while $R^2$ captures the proportion of variance explained. For classification, accuracy alone can be misleading under class imbalance, so we report precision, recall, and F1, alongside ROC-AUC, which summarizes discrimination across thresholds. This combination provides a balanced view of performance and guards against over-optimistic interpretations.
+
+\paragraph{Linear vs. nonlinear models}
+Linear models provide a transparent baseline and are often competitive when relationships are approximately linear and noise is high. Tree-based models capture interactions and nonlinear effects that are common in media markets (e.g., platform effects interacting with scores or release timing). Comparing both families provides a robust assessment of whether predictive gains come from nonlinear structure or from noise reduction.
+
+\paragraph{Why separate regression and classification}
+Regression targets continuous sales and supports nuanced comparisons across the full distribution, while classification targets a practical business question: is a title commercially successful (above 1M units)? The two tasks answer complementary questions and allow for different evaluation metrics and model choices.
+
+\paragraph{Class imbalance considerations}
+Success is a minority class, so we interpret recall and F1 with care. High ROC-AUC with modest recall indicates that the model ranks successful games well but may be conservative at the default threshold. This motivates reporting ROC-AUC and discussing threshold effects rather than relying only on accuracy.
 % ==============================
 \subsection{Unsupervised learning: K-means clustering of games}
 % ==============================
 
-We use an unsupervised approach to summarize heterogeneity across games. Clustering is descriptive: it is not used for prediction but helps interpret patterns in scores, engagement, and sales.
+We use an unsupervised approach to summarize heterogeneity across games. \textbf{Clustering is purely exploratory and does not feed into predictive models; it is included only to provide descriptive intuition.}
 
 \paragraph{Variables and standardization.}
-Clustering uses numeric indicators: \texttt{Year\_of\_Release}, \texttt{Critic\_Score}, \texttt{Critic\_Count}, \texttt{User\_Score\_100}, and \texttt{User\_Count}. All variables are median-imputed and standardized to ensure comparable scales.
+Clustering uses numeric indicators: release year, critic score, critic count, user score (0--100), and user count. All variables are median-imputed and standardized to ensure comparable scales.
 
 \paragraph{Algorithm and choice of $K$.}
 We use K-means with Euclidean distance and select $K=3$ to balance interpretability and separation. This yields clear profiles for low-, mid-, and high-engagement games.

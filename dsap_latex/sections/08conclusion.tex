@@ -2,6 +2,17 @@
 
 This project analyzed and predicted video game success using a combination of regression, classification, and clustering. The best predictive model for sales was HistGradientBoosting, while Random Forest feature importance provided interpretable insights into what drives commercial performance.
 
-The main finding is that visibility and engagement (critic/user counts) are the strongest predictors of sales, followed by platform and publisher effects. Review scores matter, but their impact is smaller than the volume of attention. Clustering reveals distinct segments of games that differ in both engagement and sales outcomes.
+The main finding is that visibility and engagement (critic/user counts) are the strongest predictors of sales, followed by platform and publisher effects. Review scores matter, but their impact is smaller than the volume of attention. Clustering reveals segments of games that differ in both engagement and sales outcomes, though separation is moderate rather than sharp.
 
 Limitations include reliance on historical sales data and the absence of marketing spend or advertising variables, which likely influence success. Future work could incorporate richer marketing signals, franchise indicators, or regional sales breakdowns, and explore model calibration for better success classification.
+
+Despite these limitations, the project provides a reproducible pipeline and a compact set of interpretable figures that answer the research question. The combination of predictive accuracy and explanatory insights makes the analysis suitable for academic evaluation and practical discussion.
+
+\paragraph{Implications}
+For publishers and platforms, the findings suggest that visibility and engagement are actionable indicators of commercial performance. Monitoring early signals of attention may help prioritize marketing resources and release timing.
+
+\paragraph{Future work}
+Future research could incorporate pre-release signals (wishlist activity, media exposure, trailers), causal methods to mitigate endogeneity, and panel data to track franchises across years. These extensions would strengthen the explanatory value while preserving predictive utility.
+
+\paragraph{Closing note on clustering}
+Clustering provides complementary exploratory intuition but remains secondary to the supervised predictive findings.
