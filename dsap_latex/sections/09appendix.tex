@@ -3,11 +3,27 @@
 % ============================
 
 \subsection{AI Usage}
-This project used AI tools (ChatGPT) as a learning aid for refactoring and
-debugging. All final decisions, experiments, and interpretations were made
-by the author.
+This project used AI tools (ChatGPT) as a learning aid for refactoring,
+debugging, and improving report wording/clarity. AI assistance was used to
+propose code structure, suggest evaluation visuals, and rewrite paragraphs
+for concision and academic tone. All final decisions, experiments,
+interpretations, and submissions were made by the author, who verified the
+outputs and ensured compliance with the course requirements.
 
 \subsection{Cluster Profiles (Condensed)}
 Cluster~1: High-engagement, high-sales titles with stronger critic reception.\\
 Cluster~0: Lower-sales games with modest critic scores and mixed platforms.\\
 Cluster~2: Mid-range group with slightly higher sales than Cluster~0 and older average release year.
+
+\subsection{Code Repository}
+\noindent
+\textbf{GitHub Repository:} \url{https://github.com/maximesudan-hub/Video_Games_Success1}
+
+\paragraph{Repository structure}
+The repository follows the course template: \texttt{main.py} is the entry point; core logic lives in \texttt{src/} (data loading, models, evaluation); raw and processed data are under \texttt{data/}; outputs (figures and metrics) are written to \texttt{results/}.
+
+\paragraph{Installation}
+Create a virtual environment and install dependencies: \texttt{pip install -r requirements.txt}. The project uses Python 3.10+ and standard data-science libraries (pandas, scikit-learn, matplotlib).
+
+\paragraph{Reproducibility}
+Run \texttt{python main.py} from the repository root to reproduce all metrics and figures. The preprocessing can be rerun via \texttt{python -m src.data\_loader}. Random seeds are fixed (e.g., \texttt{random\_state=42}) to ensure consistent results.

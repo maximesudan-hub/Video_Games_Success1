@@ -4,12 +4,7 @@
 This section presents the empirical results of the predictive models. We compare linear and nonlinear approaches for regression, evaluate classification performance for success prediction, and summarize clustering results. All models use an 80/20 train--test split with fixed random seeds.
 
 \subsection{Experimental Setup}
-
-\begin{itemize}
-\item \textbf{Hardware:} Apple Silicon (M1) 8-core CPU (macOS). No GPU used.
-\item \textbf{Software:} Python 3.13 with \texttt{numpy}, \texttt{pandas}, \texttt{scikit-learn}, \texttt{matplotlib}.
-\item \textbf{Protocol:} random train/test split (80/20), \texttt{random\_state=42}.
-\end{itemize}
+Hardware: Apple Silicon (M1) 8-core CPU (macOS). Software: Python 3.13 with numpy, pandas, scikit-learn, matplotlib. Protocol: random train/test split (80/20), random\_state = 42.
 
 
 \subsection{Performance Evaluation}
@@ -17,7 +12,16 @@ This section presents the empirical results of the predictive models. We compare
 Table~\ref{tab:reg_metrics} summarizes regression performance. HistGradientBoosting is the best model with $R^2 = 0.560$ and RMSE $= 0.215$ on the test set. Figure~\ref{fig:pred_true} shows predicted versus true Log\_Sales for the best model.
 \paragraph{Interpretation}
 The regression results indicate moderate predictive power. The scatter plot shows that predictions track overall trends but under-estimate extremes, which is expected in sales data with heavy tails. Linear models remain competitive but are consistently outperformed by boosting. The performance gap between linear and boosting models suggests meaningful nonlinear structure (platform $\times$ engagement $\times$ timing).
-\begin{table}[H]
+\subsection{Visualizations}
+\begin{figure}[H]
+\centering
+\begin{minipage}{0.46\linewidth}
+\centering
+\includegraphics[width=0.9\linewidth]{regression_pred_vs_true.png}
+\caption{Predicted vs. true Log\_Sales (best regression model).}
+\label{fig:pred_true}
+\end{minipage}\hfill
+\begin{minipage}{0.46\linewidth}
 \centering
 \small
 \begin{tabular}{lcc}
@@ -30,24 +34,19 @@ Ridge & 0.241 & 0.448 \\
 OLS & 0.247 & 0.422 \\
 \bottomrule
 \end{tabular}
-\caption{Regression performance on Log\_Sales (test set).}
+\captionof{table}{Regression performance on Log\_Sales (test set).}
 \label{tab:reg_metrics}
-\end{table}
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{regression_pred_vs_true.png}
-\caption{Predicted vs. true Log\_Sales (best regression model).}
-\label{fig:pred_true}
+\end{minipage}
 \end{figure}
 
 \subsubsection{Interpretability}
-Feature importance from Random Forest indicates that engagement variables (User Count, Critic Count) dominate, followed by platform and publisher effects. Figure~\ref{fig:feat_imp} summarizes the top features.
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{feature_importance.png}
+\includegraphics[width=0.6\linewidth]{feature_importance.png}
 \caption{Random Forest feature importance (top features).}
 \label{fig:feat_imp}
 \end{figure}
+Feature importance from Random Forest indicates that engagement variables (User Count, Critic Count) dominate, followed by platform and publisher effects. The ranking suggests that visibility (counts) carries more predictive signal than average scores, while genre and rating have smaller contributions.
 
 \subsubsection{Classification performance}
 Table~\ref{tab:cls_metrics} reports classification metrics for the success label (Global\_Sales $> 1$M). The Random Forest classifier achieves ROC-AUC $= 0.874$.
@@ -69,7 +68,7 @@ Logistic Reg. & 0.924 & 0.744 & 0.302 & 0.430 & 0.858 \\
 \end{table}
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{classification_roc_curve.png}
+\includegraphics[width=0.55\linewidth]{classification_roc_curve.png}
 \caption{ROC curve for success classification.}
 \label{fig:roc}
 \end{figure}
@@ -78,27 +77,27 @@ Logistic Reg. & 0.924 & 0.744 & 0.302 & 0.430 & 0.858 \\
 Numeric-only K-means with $k=3$ yields moderately separated segments (silhouette $= 0.243$). Figure~\ref{fig:cluster_pca} visualizes clusters in 2D. Figures~\ref{fig:cluster_sales} and~\ref{fig:cluster_critic} compare mean Global\_Sales and mean Critic\_Count across clusters to provide descriptive context.
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{clustering_pca.png}
+\includegraphics[width=0.6\linewidth]{clustering_pca.png}
 \caption{PCA visualization of clusters (k=3).}
 \label{fig:cluster_pca}
 \end{figure}
-
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{clustering_profile_sales.png}
+\begin{minipage}{0.46\linewidth}
+\centering
+\includegraphics[width=0.9\linewidth]{clustering_profile_sales.png}
 \caption{Mean Global Sales by cluster (millions of units).}
 \label{fig:cluster_sales}
-\end{figure}
-
-\begin{figure}[H]
+\end{minipage}\hfill
+\begin{minipage}{0.46\linewidth}
 \centering
-\includegraphics[width=\linewidth]{clustering_profile_critic_count.png}
+\includegraphics[width=0.9\linewidth]{clustering_profile_critic_count.png}
 \caption{Mean Critic Count by cluster.}
 \label{fig:cluster_critic}
+\end{minipage}
 \end{figure}
 \paragraph{Interpretation}
-Clusters provide descriptive segmentation rather than strong separation. One cluster concentrates higher-engagement, higher-sales titles, while others group lower-visibility or older-platform games. This is exploratory and complements the predictive findings.
-\begin{table}[H]
+\begin{wraptable}{r}{0.46\linewidth}
 \centering
 \small
 \begin{tabular}{lcc}
@@ -110,7 +109,8 @@ $k$ & Silhouette & Inertia \\
 \end{tabular}
 \caption{Clustering metrics (numeric-only K-means).}
 \label{tab:cluster_metrics}
-\end{table}
+\end{wraptable}
+Clusters provide descriptive segmentation rather than strong separation. One cluster concentrates higher-engagement, higher-sales titles, while others group lower-visibility or older-platform games. This is exploratory and complements the predictive findings.
 
 \paragraph{Cluster descriptions (condensed).}
 Cluster~1 corresponds to higher-engagement, higher-sales titles with the strongest critic reception; Cluster~0 captures lower-sales games with modest critic scores; Cluster~2 is a mid-range group that is older on average. Full profiles are available in the appendix.

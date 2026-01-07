@@ -4,7 +4,7 @@
 \usepackage[english]{babel}
 
 % Layout
-\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage[a4paper,margin=1in]{geometry}
 \usepackage{setspace}
 \onehalfspacing
 \setlength{\parindent}{0pt}
@@ -28,6 +28,13 @@
 \usepackage{array}
 \usepackage{caption}
 \usepackage{tabularx}
+\usepackage{wrapfig}
+
+% Float spacing (reduce large gaps)
+\setlength{\textfloatsep}{6pt}
+\setlength{\floatsep}{4pt}
+\setlength{\intextsep}{6pt}
+\captionsetup{font=footnotesize,skip=3pt}
 
 % Lists (avoid non-default packages for portability)
 \setlength{\itemsep}{2pt}

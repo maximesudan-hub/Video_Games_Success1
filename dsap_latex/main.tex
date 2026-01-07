@@ -1,5 +1,5 @@
 % main.tex
-\documentclass[8pt,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 
 \input{preamble}
 
@@ -7,7 +7,7 @@
 \graphicspath{{figure/}{results/figures/}{../results/figures/}{../results/}}
 
 \title{\textbf{Video Games Success: Explaining and Predicting Commercial Performance}}
-\author{Maxime Sudan\\HEC Lausanne\\MScE\\\texttt{maxime.sudan@unil.ch}}
+\author{Maxime Sudan (22214043)\\HEC Lausanne\\MScE\\\texttt{maxime.sudan@unil.ch}}
 \date{}
 
 \begin{document}
@@ -15,22 +15,24 @@
 % --- Title (pleine largeur si tu passes en 2 colonnes après) ---
 
 % --- Corps du texte ---
-\twocolumn
 \input{sections/00Title}
 \input{sections/02execsum}
+\clearpage
+\tableofcontents
+\clearpage
 \input{sections/01Introduction}
 \input{sections/03methods}
-\input{sections/04implementation}
-\input{sections/05Codebase&Reproducibility}
 \input{sections/06results}
 \input{sections/07discussion}
 \input{sections/08conclusion}
 
 % --- Bibliography (si tu utilises references.bib ; sinon commente) ---
+\clearpage
 \bibliographystyle{apalike}
 \bibliography{references}
 
 % --- Appendix ---
+\clearpage
 \onecolumn
 \appendix
 \input{sections/09appendix}

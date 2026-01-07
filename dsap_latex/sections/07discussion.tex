@@ -7,6 +7,7 @@ Across models, engagement and visibility variables (Critic/User counts) consiste
 Clustering based on numeric signals yields three exploratory groups with partial separation, consistent with the moderate silhouette score, and provides descriptive context rather than causal or predictive claims.
 
 Overall, the findings support the central research question: success is not driven by a single factor but by a combination of reception, exposure, and market context. The choice of model depends on the objective: HistGradientBoosting for best prediction, Random Forest for explanatory insights. Feature importance reflects predictive relevance and should not be interpreted as causal effects.
+Given the observational nature of the dataset, all reported relationships should be interpreted as descriptive associations rather than causal mechanisms.
 
 \paragraph{Limitations}
 The analysis relies on post-release signals (critic and user feedback), which can be influenced by popularity and marketing. This introduces endogeneity and limits causal interpretation. In addition, the dataset does not include direct measures of marketing spend, franchise strength, or advertising reach, which are likely important determinants of sales.
@@ -19,14 +20,7 @@ Variables such as Critic\_Count and User\_Count reflect attention and may increa
 \paragraph{Predictive vs. explanatory goals}
 The project is explicitly predictive: the goal is to estimate sales and identify strong correlates. This is different from estimating causal effects. A high-performing model can still rely on variables that are not actionable at release time. This distinction is emphasized to avoid over-interpretation of coefficients or importances.
 
-\paragraph{Actionability of signals}
-From a business perspective, some predictors are actionable (platform selection, release timing), while others are not (post-release review counts). This matters when translating findings into decisions. The report therefore highlights which variables should be interpreted as signals of market traction rather than levers that can be directly controlled.
+\paragraph{Actionability and temporal shifts}
+Some predictors are actionable (platform selection, release timing), while others are not (post-release review counts). The dataset ends in 2016, which limits generalization to current markets.
 
-\paragraph{Temporal and platform shifts}
-The dataset ends in 2016 and underrepresents newer distribution models (live-service, early access). Platform cycles and consumer behavior have evolved since then. These shifts limit generalization and suggest that the relationships documented here may weaken or change for newer releases.
-
-\paragraph{Data limitations and external validity}
-The Kaggle dataset relies on VGChartz sales estimates and Metacritic scores, both of which are imperfect proxies for the true market. Sales estimates may be noisy for smaller titles or regional releases, and review scores may reflect platform-specific biases. The results should therefore be interpreted as indicative rather than definitive.
-
-\paragraph{Robustness and generalizability}
-Model performance is evaluated on a held-out split with fixed random seeds, but the dataset still reflects historical market conditions up to 2016. Future releases and platform shifts could change these relationships. In particular, digital distribution and live-service models may alter how reviews and visibility translate into sales.
+% Robustness and generalizability discussed briefly in Conclusion/Future Directions.
